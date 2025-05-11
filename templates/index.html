@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-powered Education Assistant for students and educators">
+    <title>Education Assistant - AI Learning Companion</title>
+    
+    <!-- Preload important resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    
+    <!-- Theme color for mobile browsers -->
+    <meta name="theme-color" content="#4f46e5">
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" aria-label="Main navigation">
+            <div class="sidebar-header">
+                <div class="logo" aria-label="Education Assistant">
+                    <img src="{{ url_for('static', filename='logo.png') }}" 
+                         alt="" 
+                         class="logo-image"
+                         width="32"
+                         height="32"
+                         aria-hidden="true">
+                    <h2>Education Assistant</h2>
+                </div>
+                <button class="new-chat-button" id="new-chat-btn" aria-label="Start new conversation">
+                    <span class="plus-icon" aria-hidden="true">+</span>
+                    <span class="button-text">New Chat</span>
+                </button>
+            </div>
+            
+            <nav class="chat-history-container" aria-label="Chat history">
+                <h3 class="history-title" id="history-label">Recent Conversations</h3>
+                <div class="chat-history" id="chat-history" role="list" aria-labelledby="history-label">
+                    <!-- Chat history will be populated by JavaScript -->
+                </div>
+            </nav>
+            
+            <footer class="sidebar-footer">
+                <button class="settings-button" id="settings-btn" aria-label="Settings">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    <span class="button-text">Settings</span>
+                </button>
+            </footer>
+        </aside>
+        
+        <!-- Main Chat Area -->
+        <main class="main-chat" aria-label="Chat interface">
+            <header class="chat-header">
+                <div class="header-content">
+                    <h1>Education Assistant</h1>
+                    <p class="subtitle">Personalized learning guidance for students and educators</p>
+                </div>
+            </header>
+            
+            <div id="chat-messages" 
+                 class="chat-messages" 
+                 role="log" 
+                 aria-live="polite"
+                 aria-atomic="false">
+                <!-- Messages will be inserted here by JavaScript -->
+            </div>
+            
+            <form class="chat-input-container" id="chat-form" aria-label="Chat input">
+                <div class="input-wrapper">
+                    <textarea 
+                        id="user-input" 
+                        placeholder="Ask an education-related question..."
+                        rows="1"
+                        aria-label="Type your question here"
+                        autocomplete="off"
+                        autocorrect="on"
+                        spellcheck="true"
+                        maxlength="2000"
+                        required></textarea>
+                    <button id="send-btn" 
+                            class="send-button" 
+                            type="submit"
+                            aria-label="Send message"
+                            disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" 
+                             viewBox="0 0 24 24" 
+                             fill="none" 
+                             stroke="currentColor" 
+                             stroke-width="2" 
+                             stroke-linecap="round" 
+                             stroke-linejoin="round"
+                             aria-hidden="true">
+                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                        </svg>
+                        <span class="sr-only">Send message</span>
+                    </button>
+                </div>
+                <p class="input-hint">
+                    <span class="key-combo">Shift+Enter</span> for new line • 
+                    <span class="key-combo">Enter</span> to send
+                </p>
+            </form>
+        </main>
+    </div>
+
+    <!-- Loading JavaScript -->
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+    
+    <!-- PWA Support -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('{{ url_for("static", filename="sw.js") }}')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
